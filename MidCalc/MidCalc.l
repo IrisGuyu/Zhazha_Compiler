@@ -59,6 +59,13 @@ name 			{alphabet}+
 ")"             {
 					return RBRACKET;
 				}
+"sqrt"			{
+					return SQRT;
+				}
+"log"
+"cmp"			{
+					return CMP;
+				}
 {name}			{	
 					//cout << "FOUND A NAME" << endl;
 					yylval.Name = new char[128];

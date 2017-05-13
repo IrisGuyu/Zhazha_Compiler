@@ -17,6 +17,8 @@ void yyerror(char const *s);
 }
 %token <Number>	NUM
 %token <Name>	NAME
+%token SQRT		"sqrt"
+%token CMP		"cmp"
 %token PLUS 	"+"
 %token MINUS	"-"
 %token MULTI	"*"
@@ -38,6 +40,7 @@ line:
 	"\n" 
 	| exp "\n" { printf ("%.10g\n", $<Number>1); } 
 	| assign_stmt "\n"
+	| comparison "\n"
 	| error "\n"
 	;
 
@@ -48,6 +51,16 @@ assign_stmt:
 		if(!A)
 			fprintf(stderr, "Empty string or not enough space\n");
 	};
+comparison:
+	exp "cmp" exp {
+		if ($<Number>1 > $<Number>3)
+			cout << ">" << endl;
+		else if ($<Number>1 < $<Number>3)
+			cout << "<" << endl;
+		else if ($<Number>1 == $<Number>3)
+			cout << "=" << endl;
+	};
+	
 exp:
 	term {$<Number>$ = $<Number>1;}
 	|exp "+" term {$<Number>$ = $<Number>1 + $<Number>3;}
@@ -75,6 +88,7 @@ atom:
 		}
 	|"-" NUM { $<Number>$ = - $<Number>2; }
 	|"(" exp ")"{ $<Number>$ = $<Number>2; }
+	| "sqrt" "(" exp ")" {$<Number>$ = sqrt($<Number>3);}
 	;
 %%	
 int main (int argc, char const* argv[]) {
